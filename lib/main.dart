@@ -33,23 +33,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   int a = 0;
   int b = 0;
-  var znamenkoInt = 0;
+  var znamenkoInt = 3;
   var znamenkoZnak = ' ';
   var delitele = [];
   var nDelitelu = 0;
+  final controllerVysledek = TextEditingController();
 
-  void _incrementCounter() {
+  void _generateProblem() {
     setState(() {
-      _counter++;
-      znamenkoInt = Random().nextInt(3);
-      a = Random().nextInt(99) + 1;
+      a = 0;
+      b = 0;
+      delitele = [];
+      nDelitelu = 0;
+      znamenkoInt = Random().nextInt(4);
       switch (znamenkoInt) {
         case 0:
           {
             znamenkoZnak = "+";
+            a = Random().nextInt(99) + 1;
             b = Random().nextInt(100) + 1;
           }
           break;
@@ -57,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
         case 1:
           {
             znamenkoZnak = "-";
+            a = Random().nextInt(99) + 1;
             b = Random().nextInt(a - 1) + 1;
           }
           break;
@@ -64,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
         case 2:
           {
             znamenkoZnak = "*";
+            a = Random().nextInt(99) + 1;
             b = Random().nextInt(10) + 1;
           }
           break;
@@ -71,17 +76,22 @@ class _MyHomePageState extends State<MyHomePage> {
         case 3:
           {
             znamenkoZnak = "/";
-            for (var i = 2; i < sqrt(a); i++) {
-              if (a % i == 0) {
-                delitele[nDelitelu] = i;
-                nDelitelu++;
+            while (nDelitelu == 0) {
+              a = Random().nextInt(99) + 1;
+              delitele = [];
+              nDelitelu = 0;
+              for (var i = 2; i < sqrt(a); i++) {
+                if (a % i == 0) {
+                  delitele.add(i);
+                  nDelitelu++;
+                  if (a / i != i) {
+                    delitele.add((a / i).round());
+                    nDelitelu++;
+                  }
+                }
               }
             }
-            if (nDelitelu != 0) {
-              b = delitele[Random().nextInt(nDelitelu)];
-            } else {
-              b = a;
-            }
+            b = delitele[Random().nextInt(nDelitelu)];
           }
           break;
       }
@@ -98,15 +108,14 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('$a'),
-            Text(znamenkoZnak),
-            Text('$b'),
+            Text('$a $znamenkoZnak $b = '),
+            TextField(controller: controllerVysledek)
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: _generateProblem,
+        tooltip: 'Nový příklad',
         child: const Icon(Icons.add),
       ),
     );
