@@ -9,7 +9,7 @@ void main() {
 var resController = TextEditingController();
 var result = "";
 int resultInt = 0;
-int spravneOdpovedi = 398;
+int spravneOdpovedi = 0;
 int a = 0;
 int b = 0;
 int znamenkoInt = 0;
@@ -22,12 +22,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(
+    return const MaterialApp(
+      home: MyHomePage(
           title:
               'Vypočítejte příklady pro posun k pochopení problému tří těles:'),
     );
@@ -138,6 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ],
                           ));
                 }
+                zprava = "";
               },
               tooltip: 'Ověřit výsledek',
               child: const Icon(
