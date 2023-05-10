@@ -10,6 +10,7 @@ var resController = TextEditingController();
 var result = "";
 int resultInt = 0;
 int spravneOdpovedi = 0;
+const int potrebneOdpovedi = 100;
 int a = 0;
 int b = 0;
 int znamenkoInt = 0;
@@ -43,6 +44,50 @@ class _MyHomePageState extends State<MyHomePage> {
   void refresh() {
     setState(() {
       resChecker();
+      var zprava = "";
+      switch (spravneOdpovedi) {
+        case (potrebneOdpovedi):
+          {
+            zprava = "Blížíte se ke správnému výpočtu.";
+            break;
+          }
+        case potrebneOdpovedi * 2:
+          {
+            zprava =
+                "Zdá se, že chaotická éra a stabilní éra se střídají nepravidelně.";
+            break;
+          }
+        case potrebneOdpovedi * 3:
+          {
+            zprava =
+                "V některých okamžicích se objeví až tři slunce na obloze zároveň.";
+            break;
+          }
+        case potrebneOdpovedi * 4:
+          {
+            zprava =
+                "Výpočty jsou hotové. Tento problém nemá řešení. Není možné spočítat, kdy bude stabilní a kdy chaotická éra.";
+            break;
+          }
+        default:
+          {
+            break;
+          }
+      }
+      if (spravneOdpovedi % potrebneOdpovedi == 0 && spravneOdpovedi != 0) {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: const Text("Pokrok"),
+                  content: (Text(zprava)),
+                  actions: [
+                    TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text("OK"))
+                  ],
+                ));
+      }
+      zprava = "";
     });
   }
 
@@ -74,6 +119,10 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 200,
               height: 80,
               child: TextField(
+                onSubmitted: (value) {
+                  refresh();
+                },
+                autofocus: true,
                 controller: resController,
                 style: const TextStyle(fontSize: 50),
                 decoration: const InputDecoration(
@@ -91,50 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: Colors.yellow[900],
               onPressed: () {
                 refresh();
-                var zprava = "";
-                switch (spravneOdpovedi) {
-                  case 100:
-                    {
-                      zprava = "Blížíte se ke správnému výpočtu.";
-                      break;
-                    }
-                  case 200:
-                    {
-                      zprava =
-                          "Zdá se, že chaotická éra a stabilní éra se pravidelně střídají.";
-                      break;
-                    }
-                  case 300:
-                    {
-                      zprava =
-                          "V některých okamžicích se objeví až tři slunce na obloze zároveň.";
-                      break;
-                    }
-                  case 400:
-                    {
-                      zprava =
-                          "Výpočty jsou hotové. Tento problém nemá řešení. Není možné spočítat, kdy bude stabilní a kdy chaotická éra.";
-                      break;
-                    }
-                  default:
-                    {
-                      break;
-                    }
-                }
-                if (spravneOdpovedi % 100 == 0 && spravneOdpovedi != 0) {
-                  showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                            title: const Text("Pokrok"),
-                            content: (Text(zprava)),
-                            actions: [
-                              TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("OK"))
-                            ],
-                          ));
-                }
-                zprava = "";
               },
               tooltip: 'Ověřit výsledek',
               child: const Icon(
