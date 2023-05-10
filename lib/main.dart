@@ -10,7 +10,7 @@ var resController = TextEditingController();
 var result = "";
 int resultInt = 0;
 int spravneOdpovedi = 0;
-const int potrebneOdpovedi = 100;
+const int potrebneOdpovedi = 5;
 int a = 0;
 int b = 0;
 int znamenkoInt = 0;
@@ -82,12 +82,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   content: (Text(zprava)),
                   actions: [
                     TextButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          zprava = "";
+                        },
                         child: const Text("OK"))
                   ],
                 ));
       }
-      zprava = "";
     });
   }
 
@@ -104,7 +106,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: LinearProgressIndicator(
                 minHeight: 30,
                 backgroundColor: Colors.white,
-                value: ((spravneOdpovedi % 100) / 100),
+                value:
+                    ((spravneOdpovedi % potrebneOdpovedi) / potrebneOdpovedi),
               )),
         ),
         body: Center(
