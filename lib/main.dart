@@ -99,32 +99,32 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.yellow[900],
-          centerTitle: true,
-          title: Container(
-              width: 750,
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2)),
-              child: LinearProgressIndicator(
-                minHeight: 30,
-                backgroundColor: Colors.white,
-                value:
-                    ((spravneOdpovedi % potrebneOdpovedi) / potrebneOdpovedi),
+      appBar: AppBar(
+        backgroundColor: Colors.yellow[900],
+        centerTitle: true,
+        toolbarHeight: 120,
+        title: Container(
+            width: 750,
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 2)),
+            child: LinearProgressIndicator(
+              minHeight: 50,
+              backgroundColor: Colors.white,
+              value: ((spravneOdpovedi % potrebneOdpovedi) / potrebneOdpovedi),
+            )),
+      ),
+      body: Center(
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('$a $znamenkoZnak $b = ',
+              style: const TextStyle(
+                fontSize: 80,
               )),
-        ),
-        body: Center(
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('$a $znamenkoZnak $b = ',
-                style: const TextStyle(
-                  fontSize: 50,
-                )),
-            SizedBox(
-              width: 200,
-              height: 80,
-              child: TextField(
+          SizedBox(
+            width: 240,
+            height: 140,
+            child: TextField(
                 onSubmitted: (value) {
                   refresh();
                   _polickoOdpovediFocusInput.requestFocus();
@@ -132,29 +132,28 @@ class _MyHomePageState extends State<MyHomePage> {
                 autofocus: true,
                 focusNode: _polickoOdpovediFocusInput,
                 controller: resController,
-                style: const TextStyle(fontSize: 50),
+                style: const TextStyle(fontSize: 80),
                 decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: '1-1000',
-                    hintStyle: TextStyle(fontSize: 50)),
-              ),
-            )
-          ],
-        )),
-        floatingActionButton: SizedBox(
-            height: 100,
-            width: 100,
-            child: FloatingActionButton(
-              backgroundColor: Colors.yellow[900],
-              onPressed: () {
-                refresh();
-              },
-              tooltip: 'Ověřit výsledek',
-              child: const Icon(
-                Icons.check,
-                size: 100,
-              ),
-            )));
+                  border: OutlineInputBorder(),
+                )),
+          )
+        ],
+      )),
+      // floatingActionButton: SizedBox(
+      //     height: 100,
+      //     width: 100,
+      //     child: FloatingActionButton(
+      //       backgroundColor: Colors.yellow[900],
+      //       onPressed: () {
+      //         refresh();
+      //       },
+      //       tooltip: 'Ověřit výsledek',
+      //       child: const Icon(
+      //         Icons.check,
+      //         size: 100,
+      //       ),
+      //     ))
+    );
   }
 }
 
