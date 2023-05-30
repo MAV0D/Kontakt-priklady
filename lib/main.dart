@@ -100,11 +100,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    const Color pink = Color.fromARGB(255, 255, 180, 192);
-    const Color blue = Color.fromARGB(255, 172, 241, 255);
+    final pink = Color.fromARGB(255, 255, 180, 180);
+    final blue = Color.fromARGB(255, 152, 208, 229);
     final Color textColor = (Random().nextInt(99) % 2 == 0) ? pink : blue;
 
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 199, 199, 199),
       appBar: AppBar(
         backgroundColor: Colors.yellow[900],
         centerTitle: true,
