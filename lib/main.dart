@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
+  generateProblem();
+
   runApp(const MyApp());
 }
 
@@ -98,6 +100,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    const Color pink = Color.fromARGB(255, 255, 180, 192);
+    const Color blue = Color.fromARGB(255, 172, 241, 255);
+    final Color textColor = (Random().nextInt(99) % 2 == 0) ? pink : blue;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.yellow[900],
@@ -118,7 +124,8 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('$a $znamenkoZnak $b = ',
-              style: const TextStyle(
+              style: TextStyle(
+                color: textColor,
                 fontSize: 80,
               )),
           SizedBox(
