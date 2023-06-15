@@ -30,6 +30,34 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   if (!window.Create(L"app1", origin, size)) {
     return EXIT_FAILURE;
   }
+
+  //HWND is window handler
+  HWND hwnd = window.GetHandle();
+
+  auto windowHDC = GetDC(hwnd);
+  int fullscreenWidth  = GetDeviceCaps(windowHDC, DESKTOPHORZRES);
+  int fullscreenHeight = GetDeviceCaps(windowHDC, DESKTOPVERTRES);
+  int colourBits       = GetDeviceCaps(windowHDC, BITSPIXEL);
+  int refreshRate      = GetDeviceCaps(windowHDC, VREFRESH);
+
+  DEVMODE fullscreenSettings;
+  bool isChangeSuccessful;
+
+  EnumDisplaySettings(NULL, 0, &fullscreenSettings);
+  fullscreenSettings.dmPelsWidth        = fullscreenWidth;
+  fullscreenSettings.dmPelsHeight       = fullscreenHeight;
+  fullscreenSettings.dmBitsPerPel       = colourBits;
+  fullscreenSettings.dmDisplayFrequency = refreshRate;
+  fullscreenSettings.dmFields           = DM_PELSWIDTH |
+                                        DM_PELSHEIGHT |
+                                        DM_BITSPERPEL |
+                                        DM_DISPLAYFREQUENCY;
+
+  SetWindowLongPtr(hwnd, GWL_EXSTYLE, WS_EX_APPWINDOW | WS_EX_TOPMOST);
+  SetWindowLongPtr(hwnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+  SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, fullscreenWidth, fullscreenHeight, SWP_SHOWWINDOW);
+  isChangeSuccessful = ChangeDisplaySettings(&fullscreenSettings, CDS_FULLSCREEN) == DISP_CHANGE_SUCCESSFUL;
+
   window.SetQuitOnClose(true);
 
   ::MSG msg;

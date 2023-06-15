@@ -1,8 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  generateProblem();
+
   runApp(const MyApp());
 }
 
@@ -41,6 +44,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  FocusNode _polickoOdpovediFocusInput = FocusNode();
+
+  final FocusNode _dialogFocusNode = FocusNode();
+
   void refresh() {
     setState(() {
       resChecker();
@@ -48,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
       switch (spravneOdpovedi) {
         case (potrebneOdpovedi):
           {
-            zprava = "Blížíte se ke správnému výpočtu.";
+            zprava = "Pokrok! Blížíte se ke správnému výpočtu.";
             break;
           }
         case potrebneOdpovedi * 2:
@@ -59,11 +66,16 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         case potrebneOdpovedi * 3:
           {
+            zprava = "Ve stabilních érách trvá den a noc stejně dlouho.";
+            break;
+          }
+        case potrebneOdpovedi * 4:
+          {
             zprava =
                 "V některých okamžicích se objeví až tři slunce na obloze zároveň.";
             break;
           }
-        case potrebneOdpovedi * 4:
+        case potrebneOdpovedi * 5:
           {
             zprava =
                 "Výpočty jsou hotové. Tento problém nemá řešení. Není možné spočítat, kdy bude stabilní a kdy chaotická éra.";
@@ -75,81 +87,81 @@ class _MyHomePageState extends State<MyHomePage> {
           }
       }
       if (spravneOdpovedi % potrebneOdpovedi == 0 && spravneOdpovedi != 0) {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: const Text("Pokrok"),
-                  content: (Text(zprava)),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          zprava = "";
-                        },
-                        child: const Text("OK"))
-                  ],
-                ));
+        _dialogFocusNode.requestFocus();
+
+        final snackBar = SnackBar(
+            content: Text(zprava, style: TextStyle(fontSize: 40)),
+            duration: const Duration(seconds: 10));
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final pink = Color.fromARGB(255, 255, 180, 180);
+    final blue = Color.fromARGB(255, 152, 208, 229);
+    final Color textColor = (Random().nextInt(99) % 2 == 0) ? pink : blue;
+
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.yellow[900],
-          centerTitle: true,
-          title: Container(
-              width: 750,
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2)),
-              child: LinearProgressIndicator(
-                minHeight: 30,
-                backgroundColor: Colors.white,
-                value:
-                    ((spravneOdpovedi % potrebneOdpovedi) / potrebneOdpovedi),
+      backgroundColor: Color.fromARGB(255, 199, 199, 199),
+      appBar: AppBar(
+        backgroundColor: Colors.yellow[900],
+        centerTitle: true,
+        toolbarHeight: 120,
+        title: Container(
+            width: 750,
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 2)),
+            child: LinearProgressIndicator(
+              minHeight: 50,
+              backgroundColor: Colors.white,
+              value: ((spravneOdpovedi % potrebneOdpovedi) / potrebneOdpovedi),
+            )),
+      ),
+      body: Center(
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('$a $znamenkoZnak $b = ',
+              style: TextStyle(
+                color: textColor,
+                fontSize: 80,
               )),
-        ),
-        body: Center(
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('$a $znamenkoZnak $b = ',
-                style: const TextStyle(
-                  fontSize: 50,
-                )),
-            SizedBox(
-              width: 200,
-              height: 80,
-              child: TextField(
+          SizedBox(
+            width: 240,
+            height: 140,
+            child: TextField(
                 onSubmitted: (value) {
                   refresh();
+                  _polickoOdpovediFocusInput.requestFocus();
                 },
                 autofocus: true,
+                focusNode: _polickoOdpovediFocusInput,
                 controller: resController,
-                style: const TextStyle(fontSize: 50),
+                style: const TextStyle(fontSize: 80),
                 decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: '1-1000',
-                    hintStyle: TextStyle(fontSize: 50)),
-              ),
-            )
-          ],
-        )),
-        floatingActionButton: SizedBox(
-            height: 100,
-            width: 100,
-            child: FloatingActionButton(
-              backgroundColor: Colors.yellow[900],
-              onPressed: () {
-                refresh();
-              },
-              tooltip: 'Ověřit výsledek',
-              child: const Icon(
-                Icons.check,
-                size: 100,
-              ),
-            )));
+                  border: OutlineInputBorder(),
+                )),
+          )
+        ],
+      )),
+      // floatingActionButton: SizedBox(
+      //     height: 100,
+      //     width: 100,
+      //     child: FloatingActionButton(
+      //       backgroundColor: Colors.yellow[900],
+      //       onPressed: () {
+      //         refresh();
+      //       },
+      //       tooltip: 'Ověřit výsledek',
+      //       child: const Icon(
+      //         Icons.check,
+      //         size: 100,
+      //       ),
+      //     ))
+    );
   }
 }
 
@@ -209,19 +221,20 @@ void generateProblem() {
   nDelitelu = 0;
   znamenkoInt = Random().nextInt(4);
   if (spravneOdpovedi < potrebneOdpovedi * 4) {
+    const maximalniCislo = 10
     switch (znamenkoInt) {
       case 0:
         {
           znamenkoZnak = "+";
-          a = Random().nextInt(99) + 1;
-          b = Random().nextInt(100) + 1;
+          a = Random().nextInt(maximalniCislo) + 1;
+          b = Random().nextInt(maximalniCislo) + 1;
         }
         break;
 
       case 1:
         {
           znamenkoZnak = "-";
-          a = Random().nextInt(99) + 1;
+          a = Random().nextInt(maximalniCislo) + 1;
           b = Random().nextInt(a - 1) + 1;
         }
         break;
@@ -229,7 +242,7 @@ void generateProblem() {
       case 2:
         {
           znamenkoZnak = "*";
-          a = Random().nextInt(99) + 1;
+          a = Random().nextInt(maximalniCislo) + 1;
           b = Random().nextInt(10) + 1;
         }
         break;
@@ -238,7 +251,7 @@ void generateProblem() {
         {
           znamenkoZnak = "/";
           while (nDelitelu == 0) {
-            a = Random().nextInt(99) + 1;
+            a = Random().nextInt(maximalniCislo) + 1;
             delitele = [];
             nDelitelu = 0;
             for (var i = 2; i < sqrt(a); i++) {
