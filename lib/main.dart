@@ -220,8 +220,8 @@ void generateProblem() {
   delitele = [];
   nDelitelu = 0;
   znamenkoInt = Random().nextInt(4);
-  if (spravneOdpovedi < 400) {
-    const maximalniCislo = 10;
+  if (spravneOdpovedi < potrebneOdpovedi * 4) {
+    const maximalniCislo = 10
     switch (znamenkoInt) {
       case 0:
         {
