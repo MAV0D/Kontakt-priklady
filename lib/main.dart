@@ -208,7 +208,7 @@ void generateProblem() {
   delitele = [];
   nDelitelu = 0;
   znamenkoInt = Random().nextInt(4);
-  if (spravneOdpovedi < 400) {
+  if (spravneOdpovedi < potrebneOdpovedi * 4) {
     switch (znamenkoInt) {
       case 0:
         {
